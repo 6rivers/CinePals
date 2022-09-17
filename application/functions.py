@@ -83,7 +83,7 @@ def get_group_movies(group_id):
 
 
 def get_wa_link(token):
-    url = f"https://2ee7-2401-4900-1c26-4993-4556-b30c-3d9a-640.in.ngrok.io/invite/{token}"
+    url = f"https://cine-pals.herokuapp.com/invite/{token}"
     text = f"""Hello,
 This is about a website where we can add movies and review together which we like.
 Come on, join and add your favourite movies at {url}"""
