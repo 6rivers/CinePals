@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block app_content %}
+    <div class="flex-wrapper">
+      <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+          <img src="{% if user.picture %} {{ user.picture }} {% else %} {{user.avatar(36)}} {% endif %}"
+            alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+            style="width: 150px; z-index: 1">
+          {% if user == current_user %} 
+          <a class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+            style="z-index: 1;">
+            Edit profile
+          </a>
+          {% endif %}
+        </div>
+        <div class="ms-3" style="margin-top: 130px;">
+          <h5 class="text-capitalize">{{ user.name }}</h5>
+          <p>India</p>
+        </div>
+      </div>
+      {% if current_user == user %}
+        <div class="my-5 py-5">
+          {% if groups%}
+            <h2 class="m-2 p-2">Groups that you owned:</h2>
+            {% for group in groups %}
+                <div class="card m-2">
+                    <div class="card-body">
+                      <h5 class="card-title text-capitalize">{{ group.name }}</h5>
+                      <p class="card-text">{{ group.description }}</p>
+                      <button class="btn btn-danger" data-bs-toggle="modal"  data-bs-target="#deletegroupModal{{ group.invite_token }}">Delete Group</button>
+                    </div>
+                </div>
+            {% endfor %}
+          {% else %}
+            <h2 class="m-2 p-2 lead">You didn't create a Group yet,</h2>
+          {% endif %}    
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Delete Group Modal -->
+    {% if groups %}
+      {% for group in groups %}
+      <div class="modal fade" tabindex="-1" id="deletegroupModal{{ group.invite_token }}">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-3 shadow">
+              <div class="modal-body p-4 text-center">
+                <h5 class="mb-0">Delete {{ group.name }} Group?</h5>
+                <p class="mb-0">Please remember that you cannot recover this group again</p>
+              </div>
+              <div class="modal-footer flex-nowrap p-0">
+                <a href="{{ url_for('deletegroup', group_id=group.invite_token) }}" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>Yes, Delete</strong></a>
+                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">No thanks</button>
+              </div>
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    {% endif %}
+    
+
+    
+
+{% endblock %}

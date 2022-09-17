@@ -1,0 +1,29 @@
+.alerts {
+  padding: 10px 20px;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.alerts i {
+  margin-right: 10px;
+}
+
+.success {
+  background-color: #15CD72;
+  color: #fff;
+}
+
+.error {
+  background-color: var(--error-color);
+  color: #fff;
+}
+
+.warning {
+  background-color: var(--warning-color);
+  color: #000;
+}
+
+.info {
+  background-color: var(--info-color);
+  color: #000;
+}

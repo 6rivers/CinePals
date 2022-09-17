@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block app_content %}
+
+    <div class="container">
+        <h4 class="results">Your Groups:</h4>
+        {% for group in groups %}
+            <a href="{{ url_for('group', group_id=group.invite_token) }}">{{ group.name }}</a>
+
+        {% endfor %}
+    </div>
+
+{% endblock %}
