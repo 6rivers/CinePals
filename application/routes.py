@@ -301,7 +301,7 @@ def add_review(group_id, movie_id):
     movie = Movie.query.filter_by(imdb_id=movie_id).first()
     movie_id = movie.id
     review_text = request.form['ReviewText']
-    rating = request.form['Rating']
+    rating = int(request.form['Rating'])
     review = Review(text=review_text, rating=rating, user_id=user_id,
                     movie_id=movie_id, group_id=group_id)
     db.session.add(review)
