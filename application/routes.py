@@ -16,7 +16,7 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     next_page = request.args.get('next')
-    if next_page.find('invite/'):
+    if next_page is not None and next_page.find('invite/'):
         session['next_url'] = next_page
     form = LoginForm()
     if form.validate_on_submit():
@@ -28,7 +28,7 @@ def index():
             return redirect(url_for('index'))
         login_user(user, remember=form.remember.data)
         next_url = session['next_url']
-        if next_url.find('invite/'):
+        if next_url is not None and next_url.find('invite/'):
             session['next_url'] = None
             return redirect(next_url)
         next_page = request.args.get('next')
