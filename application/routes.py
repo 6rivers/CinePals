@@ -1,5 +1,5 @@
 from application import app, db
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from flask_login import login_required, login_user, current_user, logout_user
 from werkzeug.urls import url_parse
 from application.forms import RegisterForm, LoginForm, CreateGroupForm, SearchMovieForm, ResetPasswordRequestForm, ResetPasswordForm
@@ -15,7 +15,9 @@ import random
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    # print(next_page)
+    next_page = request.args.get('next')
+    if next_page.find('invite/'):
+        session['next_url'] = next_page
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data.lower()
@@ -25,6 +27,10 @@ def index():
             flash('Username or password is incorrect', category='error')
             return redirect(url_for('index'))
         login_user(user, remember=form.remember.data)
+        next_url = session['next_url']
+        if next_url.find('invite/'):
+            session['next_url'] = None
+            return redirect(next_url)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             flash(f'Welcome back {user.name}!', category='success')
