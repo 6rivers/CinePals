@@ -86,7 +86,12 @@ def oauth_callback(provider):
     if user:
         flash(f"Welcome back, {user.name}!", category='success')
         login_user(user)
-        return redirect(url_for('home'))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            flash(f'Welcome back {user.name}!', category='success')
+            return redirect(url_for('home'))
+        flash(f'Welcome back {user.name}!', category='success')
+        return redirect(next_page)
     else:
         user = User(name=name, email=email,
                     social_id=social_id, username=social_id, picture=picture)
@@ -94,7 +99,12 @@ def oauth_callback(provider):
         db.session.commit()
         flash(f"Welcome {user.name}!", category='success')
         login_user(user)
-        return redirect(url_for('home'))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            flash(f'Welcome back {user.name}!', category='success')
+            return redirect(url_for('home'))
+        flash(f'Welcome back {user.name}!', category='success')
+        return redirect(next_page)
 
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
@@ -189,6 +199,7 @@ def group(group_id):
 
 
 @app.route('/removeuser/<group_id>/<username>')
+@login_required
 def removeuser(group_id, username):
     group = Group.query.filter_by(invite_token=group_id).first()
     user = User.query.filter_by(username=username).first()
@@ -217,6 +228,7 @@ def deletegroup(group_id):
 
 
 @app.route('/search/<group_id>/<name>')
+@login_required
 def search(group_id, name):
     results = search_movies(name)
     group = Group.query.filter_by(invite_token=group_id).first()
@@ -245,6 +257,7 @@ def invite(token):
 
 
 @app.route('/profile/<username>')
+@login_required
 def profile(username):
     user = User.query.filter_by(username=username).first()
     print(current_user.email)
@@ -255,6 +268,7 @@ def profile(username):
 
 
 @app.route('/add_movie/<group_id>/<imdb_id>')
+@login_required
 def add_movie(group_id, imdb_id):
     movie = Movie.query.filter_by(imdb_id=imdb_id).first()
     if not movie:
@@ -278,6 +292,7 @@ def add_movie(group_id, imdb_id):
 
 
 @app.route('/delete_movie/<group_id>/<imdb_id>')
+@login_required
 def delete_movie(group_id, imdb_id):
     movie = Movie.query.filter_by(imdb_id=imdb_id).first()
     group = Group.query.filter_by(invite_token=group_id).first()
@@ -293,6 +308,7 @@ def delete_movie(group_id, imdb_id):
 
 
 @app.route('/add_review/<group_id>/<movie_id>', methods=['POST'])
+@login_required
 def add_review(group_id, movie_id):
     user_id = current_user.id
     group_id = group_id

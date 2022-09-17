@@ -16,7 +16,7 @@
                 <div class="group-card card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg bg-cover1">
                   <div class="d-flex flex-column p-4 text-white text-shadow-1">
                     <h6 class="mb-5 lh-1 fw-bold text-capitalize">{{ group.name }}</h6>
-                    <h6 class="fs-3 pt-2 text-capitalize">{{ group.description }}</h6>
+                    <h6 class="fs-3 pt-2 text-capitalize desc">{{ group.description }}</h6>
                     <!-- <h5 class="view-group">View</h5> -->
                     <a class="view-group" href="{{ url_for('group', group_id=group.invite_token) }}">View Group</a>
                   </div>
