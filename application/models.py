@@ -144,7 +144,7 @@ class MovieGroups(db.Model):
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(360), unique=False, nullable=True)
-    rating = db.Column(db.Integer)
+    rating = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
