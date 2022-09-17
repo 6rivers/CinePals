@@ -25,7 +25,7 @@ login = LoginManager(app)
 login.login_view = 'index'
 mail = Mail(app)
 
-if app.debug:
+if not app.debug:
 
     # ...
     if app.config['LOG_TO_STDOUT']:
