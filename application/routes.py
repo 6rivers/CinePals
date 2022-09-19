@@ -88,7 +88,6 @@ def oauth_callback(provider):
         return redirect(url_for('index'))
     user = User.query.filter_by(email=email).first()
     if user:
-        flash(f"Welcome back, {user.name}!", category='success')
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -101,7 +100,6 @@ def oauth_callback(provider):
                     social_id=social_id, username=social_id, picture=picture)
         db.session.add(user)
         db.session.commit()
-        # flash(f"Welcome {user.name}!", category='success')
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
