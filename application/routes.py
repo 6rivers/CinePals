@@ -103,7 +103,7 @@ def oauth_callback(provider):
                     social_id=social_id, username=social_id, picture=picture)
         db.session.add(user)
         db.session.commit()
-        flash(f"Welcome {user.name}!", category='success')
+        # flash(f"Welcome {user.name}!", category='success')
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -122,11 +122,11 @@ def reset_password_request():
         email = form.email.data
         user = User.query.filter_by(email=email).first()
         if user and not user.social_id:
-            print('about to send email')
+            # print('about to send email')
             send_reset_password_email(user)
         flash(
             f"Please check your Email for instructions to reset Password", category="info")
-        print('bypassed sending email')
+        # print('bypassed sending email')
         return redirect(url_for('index'))
     return render_template('reset_password_request.html', title='Reset Password', form=form)
 
