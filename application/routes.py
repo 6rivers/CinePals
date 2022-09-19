@@ -62,11 +62,9 @@ def register():
 
 @app.route('/oauth_authorize/<provider>')
 def oauth_authorize(provider):
-    print(f"provider is {provider}")
     # This takes the appropriate Sub Class based on provider(fb/google) and
     # registers via app_auth and all required parameters like apis, IDs, secrets
     authentication = OAuthSignIn.get_provider(provider)
-    print('Authentication registered')
     # This calls the authorize function in respective subclass and redirect the user
     # to Auth provider for authentication
     # it also carries the callback URL to the Auth provider
@@ -122,11 +120,9 @@ def reset_password_request():
         email = form.email.data
         user = User.query.filter_by(email=email).first()
         if user and not user.social_id:
-            # print('about to send email')
             send_reset_password_email(user)
         flash(
             f"Please check your Email for instructions to reset Password", category="info")
-        # print('bypassed sending email')
         return redirect(url_for('index'))
     return render_template('reset_password_request.html', title='Reset Password', form=form)
 
@@ -136,9 +132,7 @@ def reset_password(token):
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     user = User.verify_reset_password_token(token)
-    print(f"user {user}")
     if not user:
-        print(f"Not user {user}")
         return redirect(url_for('index'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
@@ -251,7 +245,6 @@ def invite(token):
         group_id = group.id
         user = current_user.user_groups.filter_by(group_id=group_id).first()
         if user:
-            print("user is part of this group already")
             flash('Welcome back!', category='success')
             return redirect(url_for('group', group_id=group.invite_token))
         else:
@@ -266,7 +259,6 @@ def invite(token):
 @login_required
 def profile(username):
     user = User.query.filter_by(username=username).first()
-    print(current_user.email)
     groups = None
     if user == current_user:
         groups = Group.query.filter_by(owner_id=user.id).all()

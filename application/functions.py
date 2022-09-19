@@ -43,7 +43,6 @@ def search_movies(movie_name):
                 # "genres": genres
             }
             movies_info.append(info)
-    # print(movies_info)
 
     return movies_info
 
