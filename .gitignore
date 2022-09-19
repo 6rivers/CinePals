@@ -1,6 +1,7 @@
 # Notes
 temp_notes.txt
 others/
+logs/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
