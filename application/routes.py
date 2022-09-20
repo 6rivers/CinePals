@@ -142,6 +142,22 @@ def reset_password(token):
     return render_template('reset_password.html', title='Update Password', form=form)
 
 
+@app.route('/updatepassword/<username>', methods=['GET', 'POST'])
+@login_required
+def updatepassword(username):
+    form = ResetPasswordForm()
+    if current_user.username == username:
+        if form.validate_on_submit():
+            user = current_user
+            if not user.social_id:
+                user.set_password(form.password.data)
+                db.session.commit()
+                flash(f"Your password has been updated successfully",
+                      category="success")
+                return redirect(url_for('profile', username=user.username))
+    return render_template('reset_password.html', title='Update Password', form=form)
+
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -260,6 +276,7 @@ def profile(username):
     groups = None
     if user == current_user:
         groups = Group.query.filter_by(owner_id=user.id).all()
+    print(groups)
     return render_template('profile.html', title='Profile', groups=groups, user=user)
 
 

@@ -8,6 +8,10 @@
                 <p class="font-monospace text-center">Maintain a private Movie watchlists. Create separate groups, invite friends and review movies together</p>
             </div>
             <div class="col-md-6 my-3 p-4 login-section">
+                <div class="d-grid gap-2 social_login">
+                    <a class="btn btn-outline-dark text-reset fw-bold" href="{{ url_for('oauth_authorize', provider='google') }}"><img src="../static/img/google.png" alt="" class="google_icon"> Continue with Google</a>
+                </div>
+                <span class="d-flex justify-content-center my-2 fw-semibold">or</span>
                 <form  action="" method="POST" class="py-3" novalidate>
                     {{form.hidden_tag()}}
                          <div class="form-floating">
@@ -40,11 +44,9 @@
                         {{ form.submit(class_="btn btn-primary") }}
                     </div>
                 </form>
-             <span class="d-flex justify-content-center mb-2">or</span>
-             <div class="d-grid gap-2 social_login">
-                    <a class="btn btn-outline-dark text-reset fw-bold" href="{{ url_for('oauth_authorize', provider='google') }}"><img src="../static/img/google.png" alt="" class="google_icon"> Continue with Google</a>
-                </div>
-             <div class="my-3 d-flex justify-content-center"><span>Don't have an account? <a class="btn btn-link" href="{{ url_for('register') }}">Sign Up</a></span> </div>
+             
+             
+             <div class="my-1 d-flex justify-content-center"><span>Don't have an account? <a class="btn btn-link" href="{{ url_for('register') }}">Sign Up</a></span> </div>
             </div>
         </div>         
     </section>

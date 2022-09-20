@@ -7,10 +7,10 @@
             alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
             style="width: 150px; z-index: 1">
           {% if user == current_user %} 
-          <a class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+          <button class="btn btn-outline-dark" data-mdb-ripple-color="dark" data-bs-toggle="modal"  data-bs-target="#ProfileModal"
             style="z-index: 1;">
             Edit profile
-          </a>
+          </button>
           {% endif %}
         </div>
         <div class="ms-3" style="margin-top: 130px;">
@@ -57,6 +57,25 @@
       </div>
       {% endfor %}
     {% endif %}
+
+    <!-- Edit Profile Modal -->
+
+    <div class="modal fade" tabindex="-1" id="ProfileModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-3 shadow">
+          <div class="modal-body p-4 text-center">
+            <h5 class="mb-0 text-capitalize">{{ current_user.name }}</h5>
+            <!-- <p class="mb-0">Please remember that you cannot recover this group again</p> -->
+          </div>
+          {% if not current_user.social_id %}
+          <div class="modal-footer flex-nowrap p-0">
+            <a href="{{ url_for('updatepassword', username=current_user.username) }}" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0 border-end"><strong>Update Password</strong></a>
+            <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">No thanks</button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
     
 
     
