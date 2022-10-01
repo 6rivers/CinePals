@@ -82,9 +82,9 @@ def get_group_movies(group_id):
 
 
 def get_wa_link(token):
-    url = f"https://cine-pals.herokuapp.com/invite/{token}"
+    url = f"https://cinepal.herokuapp.com/invite/{token}"
     text = f"""Hello,
-This is about a website where we can add movies and review together which we like.
+This is about a website where we can add movies and review together.
 Come on, join and add your favourite movies at {url}"""
     urlencodedtext = urllib.parse.quote(text, safe="")
     wa_link = f"https://wa.me/?text={urlencodedtext}"
