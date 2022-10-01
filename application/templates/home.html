@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block app_content %}
+<div class="flex-wrapper">
+    <div class="container">
+        <div class="d-flex justify-content-between m-3 p-3">
+            <h4 class="font-monospace">Hello, <span class="text-capitalize">{{ current_user.name }}</span></h4>
+            <button class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#creategroup">Create a Group</button>
+        </div>
+        
+        <div class="container px-4 py-5" id="">
+            <h2 class="pb-2 border-bottom">Your Groups</h2>
+            {% if groups %}
+            <div class="row row-cols-1 row-cols-lg-4 align-items-stretch g-4 py-5">
+              {% for group in groups %}  
+              <div class="col">
+                <div class="group-card card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg bg-cover1">
+                  <div class="d-flex flex-column p-4 text-white text-shadow-1">
+                    <h6 class="mb-5 lh-1 fw-bold text-capitalize">{{ group.name }}</h6>
+                    <h6 class="fs-3 pt-2 text-capitalize desc">{{ group.description }}</h6>
+                    <!-- <h5 class="view-group">View</h5> -->
+                    <a class="view-group" href="{{ url_for('group', group_id=group.invite_token) }}">View Group</a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}  
+              <p class="m-2 p-2">You have not create a Group yet,</p>
+            {% endif %}
+        </div>   
+    </div>
+</div>
+
+    
+    <!-- Create Group Modal -->
+    <div class="modal fade" id="creategroup" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="creategroupLabel">Create a movie watchlist, invite Friends and review movies together </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form  action="" method="POST" class="" novalidate>
+                    {{form.hidden_tag()}}
+                    <div class="form-floating">
+                        {{form.name(class_="form-control", id="floatingInput")}}
+                        {{form.name.label(for="floatingInput")}}
+                        {%for error in form.name.errors%}
+                            <span class="" style="color: red;">{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    <br>
+                    <div class="form-floating">
+                        {{form.desc(class_="form-control", id="floatingInput")}}
+                        {{form.desc.label(for="floatingInput")}}
+                        {%for error in form.desc.errors%}
+                            <span class="" style="color: red;">{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    <div class="modal-footer">
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>            
+          </div>
+        </div>
+      </div>
+
+     
+
+{% endblock %}

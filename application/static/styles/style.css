@@ -1,0 +1,128 @@
+:root {
+  --primary-color: #01627F;
+  --light-color: #5BA1C1;
+  --lightest-color: #e4f7ff;
+  --dark-color: #37819F;
+  --darkest-color: #005470;
+  --secondary-color: #F1962E;
+  --success-color: #15CD72;
+  --error-color: #d9534f;
+  --warning-color: #EDE04D;
+  --info-color: #ECECEC;
+  --danger-color: #f01313;
+}
+
+/* Making Footer to stick  */
+
+.flex-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+
+/* Home */
+.group-card {
+  min-height: 350px;
+  position: relative;;
+}
+
+.bg-cover1 {
+  background: url(../img/unsplash-photo-1.jpg);
+}
+
+.view-group {
+  position: absolute;
+  bottom: 0;
+  right: 40px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #e4f7ff;
+  padding: 3px 9px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.view-group:hover{
+  color: #e4f7ff;
+}
+
+.desc {
+  word-wrap: normal;
+}
+
+/* Login */
+
+.google_icon {
+  height: 25px;
+}
+
+.login-section {
+  border-left: 1px solid #011318;
+}
+
+.btn-outline-dark:hover {
+  color: lightgrey!important;
+}
+
+/* Group */
+
+.movie-cards {
+  height: 350px;
+}
+
+.movie-cover {
+  width: 120px;
+  height: 200px;
+} 
+
+.movie-title {
+  font-size: 1rem;
+  font-weight: bold;
+  display: inline-block;
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  padding-right: 0;
+} 
+
+.movie-genre {
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  display:inline;
+  border: 1px solid #fff;
+  padding: 2px;
+}
+
+/* Search Results */
+
+.search-cards {
+  height: 300px;
+}
+
+.search-cards img {
+  width: 140px;
+  height: 200px;
+  border: none;
+  border-radius: 20px;
+}
+
+
+@media (max-width:600px) {
+  .login-section {
+    border: none;
+  }
+
+  .group-card {
+    min-height: 300px;
+    position: relative;;
+  }
+
+  .search-cards {
+    max-width: 400px;
+  }
+}

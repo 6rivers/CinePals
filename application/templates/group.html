@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block app_content %}
+  <div class="flex-wrapper">
+    <div class="container">
+        <div class="group_header d-md-flex justify-content-between m-3 p-2">
+          <h4 class="font-monospace text-uppercase">{{ group.name }}</h4>
+          <!-- <button class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#invitefriends">Invite Friends</button> -->
+            
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-primary mx-2" data-bs-toggle="modal"  data-bs-target="#addmovie">Add a Movie</button>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Other details
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  {% if current_user.id == group.owner.id%}
+                    <a href="{{ wa_link }}" class="dropdown-item" target="_blank"><i class="bi bi-whatsapp"> Invite Friends via whatsapp</i></a>
+                  {% endif %}
+                </li>
+                <li>
+                  <button class="dropdown-item" data-bs-toggle="modal"  data-bs-target="#allfriends">Friends in group</button>
+                </li>
+                <!-- <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+      <div class="row">
+        {% for movie in movies %}
+        <div class="col-6 col-md-2 movie-cards ">
+          <div class="card text-white bg-dark">
+            <a data-bs-toggle="modal"  data-bs-target="#moviedetails{{ movie['imdb_id'] }}"><img src="{{ movie['cover'] }}" class="card-img-top movie-cover" alt=""></a>
+            <div class="card-body">
+              <div class="d-flex justify-content-between mx-0">
+                <a href="{{ movie['url'] }}" target="_blank" class="movie-title text-decoration-none text-reset">{{ movie['title'] }}</a>
+                {% if movie['genre'] %}<div class="movie-genre">{{ movie['genre'] }}</div>{% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+      <!-- Add Movie Modal -->
+	    <div class="modal fade" id="addmovie" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addmovieLabel">Search for your favourite movie here</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form id="search_movies" action="" method="POST" class="" novalidate>
+                {{form.hidden_tag()}}
+                <div class="form-floating">
+                    {{form.name(class_="form-control", id="floatingInput")}}
+                    {{form.name.label(for="floatingInput")}} 
+
+                    {%for error in form.name.errors%}
+                        <span class="" style="color: red;">{{error}}</span>
+                    {%endfor%}
+                </div>
+
+                <div class="modal-footer">
+                  {{ form.submit(class_="btn btn-primary") }}
+                </div>
+
+              </form>
+            </div>            
+          </div>
+        </div>
+      </div>
+
+      {% for movie in movies %}
+                  <!-- See Movie details Modal -->
+	    <div class="modal fade" id="moviedetails{{ movie['imdb_id'] }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="moviedetailsLabel">{{ movie['title'] }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <h6>Plot</h6>
+              <p>{{ movie['plot'] }}</p>
+              <div class="card p-3">
+                <h6>Add Review</h6>
+                <form id="" action="{{ url_for('add_review', group_id=group.id, movie_id=movie['imdb_id']) }}" method="POST" class="" novalidate>
+                  {{form.hidden_tag()}}
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingReview" name="ReviewText">
+                    <label for="floatingReview">Comment</label>
+                  </div>
+                  <div class="">
+                    <label class="h6 form-label">Rating (1-10)</label>
+                    <div class="d-flex justify-content-between">
+                      <input style="width: 70%;" type="range" class="form-range" min="1" max="10" step="0.5" name="Rating" 
+                    oninput="this.nextElementSibling.value = this.value">
+                    <output>5.5</output>
+                    </div>
+                    
+                  </div>
+
+                  <input type="submit" value="Submit" class="btn btn-primary mt-2">
+
+                </form>
+              </div>
+              <h6 class="my-3">Your Reviews:</h6>
+              {% if reviews %}
+                {% for r in reviews %}
+                  {% if r.movie_id == movie['id'] %}
+                  <p><img src="{% if r.reviewer.picture %} {{ r.reviewer.picture }} {% else %} {{r.reviewer.avatar(36)}} {% endif %}" alt="">
+                    <a class="btn btn-link" href="{{ url_for('profile', username=r.reviewer.username) }}">
+                      {{ r.reviewer.name }} 
+                    </a>
+                    review: {% if r.text %} {{ r.text }}, {% endif %}
+                    {% if r.rating %} {{ r.rating }}/10 {% endif %}  
+                  </p>  
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <small class="text-muted text-center">No reviews yet</small>
+              {% endif %}
+            </div>
+            <div class="modal-footer">
+              <a href="{{ url_for('delete_movie', group_id=group.invite_token, imdb_id=movie['imdb_id']) }}" class="btn btn-danger">Delete Movie</a>
+            </div>            
+          </div>
+        </div>
+      </div>
+
+
+      {%endfor%} 
+      
+       <!-- Users in Group Modal -->
+    <div class="modal fade" id="allfriends" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="allfriendsLabel">Friends in this group</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group">
+              {% for user in users %}
+                <li class="list-group-item d-flex justify-content-between">
+                  <div class="d-flex justify-content-start">
+                    <img style="width: 50px" src="{% if user.picture %} {{ user.picture }} {% else %} {{user.avatar(36)}} {% endif %}" alt="">
+                    <h5><a class="btn btn-link" href="{{ url_for('profile', username=user.username) }}">{{ user.name }}</a></h5>
+                  </div>
+                  {% if current_user.id == group.owner.id and current_user.username != user.username%}
+                    <a href="{{ url_for('removeuser', group_id=group.invite_token, username=user.username) }}" class="btn btn-primary">remove user</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>            
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
