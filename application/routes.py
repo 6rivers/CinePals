@@ -17,6 +17,7 @@ def index():
         return redirect(url_for('home'))
     next_page = request.args.get('next')
     if next_page is not None and next_page.find('invite/'):
+        print(session['next_url'])
         session['next_url'] = next_page
     form = LoginForm()
     if form.validate_on_submit():
@@ -89,6 +90,11 @@ def oauth_callback(provider):
     user = User.query.filter_by(email=email).first()
     if user:
         login_user(user)
+        next_url = session['next_url']
+        if next_url is not None and next_url.find('invite/'):
+            session['next_url'] = None
+            flash(f'Welcome back {user.name}!', category='success')
+            return redirect(next_url)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             flash(f'Welcome back {user.name}!', category='success')
@@ -101,6 +107,11 @@ def oauth_callback(provider):
         db.session.add(user)
         db.session.commit()
         login_user(user)
+        next_url = session['next_url']
+        if next_url is not None and next_url.find('invite/'):
+            session['next_url'] = None
+            flash(f'Welcome {user.name}!', category='success')
+            return redirect(next_url)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             flash(f'Welcome {user.name}!', category='success')
