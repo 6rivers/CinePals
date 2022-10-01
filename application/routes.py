@@ -103,9 +103,9 @@ def oauth_callback(provider):
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            flash(f'Welcome back {user.name}!', category='success')
+            flash(f'Welcome {user.name}!', category='success')
             return redirect(url_for('home'))
-        flash(f'Welcome back {user.name}!', category='success')
+        flash(f'Welcome {user.name}!', category='success')
         return redirect(next_page)
 
 
