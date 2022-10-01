@@ -73,6 +73,9 @@
             <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">No thanks</button>
           </div>
           {% endif %}
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('delete', username=current_user.username) }}" class="btn btn-danger">Delete Account</a>
+          {% endif %}
         </div>
       </div>
     </div>

@@ -348,3 +348,14 @@ def add_review(group_id, movie_id):
     db.session.commit()
     flash('Your review has been added', category='success')
     return redirect(url_for('group', group_id=group_token))
+
+
+@app.route('/delete/<username>')
+@login_required
+def delete(username):
+    if current_user.username != username:
+        return redirect(url_for('index'))
+    user = User.query.filter_by(username=username).first()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('index'))
