@@ -17,7 +17,6 @@ def index():
         return redirect(url_for('home'))
     next_page = request.args.get('next')
     if next_page is not None and next_page.find('invite/'):
-        print(session['next_url'])
         session['next_url'] = next_page
     form = LoginForm()
     if form.validate_on_submit():
