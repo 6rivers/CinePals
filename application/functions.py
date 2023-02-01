@@ -1,11 +1,15 @@
 import imdb
 import urllib.parse
 from application.models import Movie, Group
+from bs4 import BeautifulSoup
+import requests
 
 
 access = imdb.Cinemagoer()
 
 
+# The cover url returned from the search functions search_movies or get_movie_details below
+# is low resolution one. To get a high resolution we can modify the url as below
 def update_movie_cover(url):
     try:
         idx = url.find('_')
@@ -16,11 +20,12 @@ def update_movie_cover(url):
     return cover
 
 
+# Getting movie details based on movie name as parameter
 def search_movies(movie_name):
     try:
         movies = access.search_movie(movie_name)
     except:
-        pass
+        movies = []
     if len(movies) == 0:
         return None
     movies_info = []
@@ -28,12 +33,15 @@ def search_movies(movie_name):
         if i > 20:
             break
         else:
-            cover = movies[i]['cover url']
-            cover = update_movie_cover(cover)
             try:
                 year = movies[i]['year']
             except Exception:
-                pass
+                year = 0000
+            try:
+                cover = movies[i]['cover url']
+                cover = update_movie_cover(cover)
+            except Exception:
+                cover = None
             info = {
                 "title": movies[i]['title'],
                 "year": year,
@@ -47,24 +55,30 @@ def search_movies(movie_name):
     return movies_info
 
 
+# Getting movie details based on its IMDB Id
 def get_movie_details(imdb_id):
     movie = access.get_movie(imdb_id)
     name = movie['title']
     cover = movie['cover url']
     cover_url = update_movie_cover(cover)
     access.update(movie)
-    plot = movie['plot'][0]
+    plot = get_plot(imdb_id)
     genre = movie['genres'][0]
 
     return name, cover_url, plot, genre
 
 
+# Querying group, MovieGroups to get Movie ids, then finally Movie table to get Movie details
 def get_group_movies(group_id):
     group = Group.query.filter_by(invite_token=group_id).first()
+    # below query returns all the combination of group_id and movie_id from MovieGroups Table
+    # which has a relationship with Group through group.id
+    # so here results might looks like 1-3; 1-6; 1-19(1 being Group id)(3,6,9 -- Movie ids)
     g_movies = group.group_movies.all()
     movies_info = []
 
     for i in g_movies:
+        # Now we query Movie table by using movie_id s returned above
         movie = Movie.query.get(i.movie_id)
 
         info = {
@@ -79,6 +93,16 @@ def get_group_movies(group_id):
         movies_info.append(info)
 
     return movies_info
+
+
+def get_plot(imdb_id):
+    url = 'https://www.imdb.com/title/tt' + str(imdb_id) + '/'
+    headers = {
+        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, 'lxml')
+    plot = soup.find("span", class_="sc-16ede01-2 qqCya").text
+    return plot
 
 
 def get_wa_link(token):
