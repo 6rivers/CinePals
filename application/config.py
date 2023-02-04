@@ -16,7 +16,8 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace(
         'postgres://', 'postgresql://') or \
         'sqlite:///' + os.path.join(basedir, 'site.db')
-    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    # LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    # LOG_WITH_GUNICORN = os.getenv('LOG_WITH_GUNICORN', default=False)
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = os.environ.get('MAIL_PORT')
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS')

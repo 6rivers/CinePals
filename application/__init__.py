@@ -27,7 +27,11 @@ login = LoginManager(app)
 login.login_view = 'index'
 mail = Mail(app)
 
-# if not app.debug:
+if not app.debug:
+
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
 #     # ...
 #     # if app.config['LOG_TO_STDOUT']:
