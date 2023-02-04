@@ -19,6 +19,8 @@ def index():
     print(next_page)
     if next_page is not None and next_page.find('invite/'):
         session['next_url'] = next_page
+    elif next_page is None:
+        session['next_url'] = None
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data.lower()
