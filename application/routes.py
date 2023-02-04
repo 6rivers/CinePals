@@ -16,7 +16,7 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     next_page = request.args.get('next')
-    print(next_page)
+    # print(next_page)
     if next_page is not None and next_page.find('invite/'):
         session['next_url'] = next_page
     elif next_page is None:

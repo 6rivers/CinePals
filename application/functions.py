@@ -101,7 +101,10 @@ def get_plot(imdb_id):
         'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, 'lxml')
-    plot = soup.find("span", attrs={'data-testid': 'plot-l'}).text
+    try:
+        plot = soup.find("span", attrs={'data-testid': 'plot-l'}).text
+    except:
+        plot = "Plot not available right now"
     return plot
 
 
